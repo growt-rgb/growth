@@ -147,6 +147,20 @@
             cursor: pointer;
         }
 
+        /* --- নতুন যোগ করা CSS: নোটিশ বার --- */
+        .top-notice-bar {
+            background: #d32f2f; 
+            color: white; 
+            padding: 8px 0; 
+            font-size: 1.1rem;
+            display: none; /* ডিফল্টভাবে হাইড, এডমিন সেট করলে শো হবে */
+            border-bottom: 2px solid #b71c1c;
+        }
+        .top-notice-bar marquee { 
+            font-weight: bold; 
+            letter-spacing: 0.5px;
+        }
+
         /* হিরো সেকশন */
         .hero {
             background: linear-gradient(135deg, var(--primary-color) 60%, #1a1c3d 100%);
@@ -485,44 +499,6 @@
             margin-top: 5px;
         }
         
-        .quotes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-top: 40px;
-        }
-        
-        .quote-card {
-            background: #fff;
-            padding: 25px;
-            border-radius: 10px;
-            border-left: 4px solid var(--secondary-color);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-            position: relative;
-        }
-        
-        .quote-card i {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 2rem;
-            color: rgba(248, 182, 45, 0.2);
-        }
-        
-        .quote-card p {
-            font-size: 1.1rem;
-            color: #444;
-            font-style: italic;
-        }
-        
-        .quote-author {
-            display: block;
-            margin-top: 15px;
-            font-weight: bold;
-            color: var(--primary-color);
-            text-align: right;
-        }
-
         .contact-owner-card {
             background: linear-gradient(to right, #ffffff, #fdfbf7);
             padding: 40px;
@@ -748,7 +724,7 @@
             cursor: not-allowed;
         }
 
-        /* ----- নতুন প্রোফাইল পেজ ডিজাইন ----- */
+        /* ----- প্রোফাইল পেজ ডিজাইন ----- */
         .profile-page-wrapper {
             background: #fff;
             border-radius: 10px;
@@ -829,7 +805,7 @@
 
         /* PDF টেমপ্লেট স্টাইল (হিডেন থাকবে) */
         #pdf-content {
-            display: none; /* ডিফল্টভাবে দেখা যাবে না */
+            display: none; 
             width: 700px;
             padding: 30px;
             background: #fff;
@@ -1263,6 +1239,13 @@
         </div>
     </header>
 
+    <!-- নতুন: ডায়নামিক নোটিশ বার (এডমিন কন্ট্রোলড) -->
+    <div id="top-marquee" class="top-notice-bar">
+        <div class="container">
+            <marquee id="marquee-text" behavior="scroll" direction="left">লোড হচ্ছে...</marquee>
+        </div>
+    </div>
+
     <div id="landing-page-content">
         <!-- হিরো সেকশন -->
         <section id="home" class="hero">
@@ -1277,7 +1260,8 @@
                     
                     <a href="#special-admission-page" class="badge" onclick="showAdmissionInfoPage()">ভর্তি চলছে</a>
                     
-                    <p class="offer-text">২০ ডিসেম্বরের মধ্যে ভর্তি হলে ১৫০০ টাকা ছাড়!</p>
+                    <!-- ডায়নামিক অফার টেক্সট (আইডি যুক্ত করা হয়েছে) -->
+                    <p class="offer-text" id="dynamicOfferText">২০ ডিসেম্বরের মধ্যে ভর্তি হলে ১৫০০ টাকা ছাড়!</p>
                     
                     <a href="tel:01737837080" class="btn-main">
                         <i class="fas fa-phone-volume"></i> কল করুন: 01737837080
@@ -1893,7 +1877,7 @@
             document.getElementById('admission').style.display = 'none';
             document.getElementById('merit-test-page').style.display = 'none';
             document.getElementById('contact-page').style.display = 'none';
-            document.getElementById('student-profile-page').style.display = 'none'; // প্রোফাইল পেজ লুকানো
+            document.getElementById('student-profile-page').style.display = 'none'; 
         }
 
         function showAdmissionForm(courseValue = "") {
@@ -1931,7 +1915,6 @@
             window.scrollTo(0, 0);
         }
         
-        // নতুন: প্রোফাইল পেজ দেখানোর ফাংশন
         function showProfilePage() {
             hideAllPages();
             document.getElementById('student-profile-page').style.display = 'block';
@@ -2025,11 +2008,8 @@
             if (event.target == successModal) successModal.style.display = "none";
         }
 
-        // PDF জেনারেশন ফাংশন
         function downloadPDF() {
             const element = document.getElementById('pdf-content');
-            
-            // PDF অপশন
             const opt = {
                 margin:       0.5,
                 filename:     'Admission_Receipt_GrowthCoaching.pdf',
@@ -2037,8 +2017,6 @@
                 html2canvas:  { scale: 2 },
                 jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
             };
-
-            // এলিমেন্ট ভিজিবল করে পিডিএফ বানিয়ে আবার হাইড করা
             element.style.display = 'block';
             html2pdf().set(opt).from(element).save().then(() => {
                 element.style.display = 'none';
@@ -2046,7 +2024,7 @@
         }
     </script>
 
-    <!-- Firebase ইন্টিগ্রেশন স্ক্রিপ্ট -->
+    <!-- Firebase ইন্টিগ্রেশন স্ক্রিপ্ট (এডমিন ফিচার সহ) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -2066,7 +2044,39 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // স্টুডেন্ট আইডি জেনারেটর (GC + Year + Random 4 digit)
+        // --- নতুন: এডমিন সেটিংস লোড করা ---
+        async function loadAdminSettings() {
+            try {
+                const docRef = doc(db, "settings", "siteConfig");
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    
+                    // ১. অফার টেক্সট আপডেট
+                    if(data.offer) {
+                        const offerEl = document.getElementById('dynamicOfferText');
+                        if(offerEl) offerEl.innerText = data.offer;
+                    }
+
+                    // ২. নোটিশ বার আপডেট
+                    if(data.notice) {
+                        const marqueeBox = document.getElementById('top-marquee');
+                        const marqueeTxt = document.getElementById('marquee-text');
+                        if(marqueeBox && marqueeTxt) {
+                            marqueeTxt.innerText = data.notice;
+                            marqueeBox.style.display = 'block'; // নোটিশ থাকলে শো করবে
+                        }
+                    }
+                }
+            } catch (error) {
+                console.log("No dynamic settings found.");
+            }
+        }
+        // পেজ লোড হলেই কল হবে
+        loadAdminSettings();
+
+        // স্টুডেন্ট আইডি জেনারেটর
         const generateStudentId = () => {
             const year = new Date().getFullYear().toString().slice(-2);
             const random = Math.floor(1000 + Math.random() * 9000);
