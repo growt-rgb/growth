@@ -13,12 +13,13 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
        (function(){
+          // এখানে আগের (File 1) এর পাবলিক কি রাখা হলো যাতে অ্যাডমিশন মেইল ঠিক থাকে
           emailjs.init("4D7tV8iGZl0O5B9Ej");
        })();
     </script>
 
     <style>
-        /* পূর্বের স্টাইল হুবহু রাখা হয়েছে */
+        /* স্টাইল হুবহু রাখা হয়েছে */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'SolaimanLipi', sans-serif; }
         :root { --primary-color: #242650; --secondary-color: #F8B62D; --text-color: #333; --white: #fff; --light-bg: #f4f6f9; --footer-bg: #1a1c3d; }
         body { line-height: 1.6; color: var(--text-color); background-color: var(--light-bg); }
@@ -113,6 +114,11 @@
         .login-form-wrapper input { padding: 12px; border: 1px solid #ddd; border-radius: 6px; }
         .login-form-wrapper button { background: var(--primary-color); color: #fff; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
         .login-form-wrapper button:disabled { background: #ccc; cursor: not-allowed; }
+        /* Forgot Password Link Style */
+        .forgot-password-link { text-align: right; font-size: 0.9rem; margin-top: 10px; }
+        .forgot-password-link a { color: var(--primary-color); text-decoration: none; font-weight: bold; }
+        .forgot-password-link a:hover { text-decoration: underline; color: var(--secondary-color); }
+
         .profile-page-wrapper { background: #fff; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); overflow: hidden; margin-top: 20px; }
         .profile-header { background: var(--primary-color); color: #fff; padding: 30px 20px; text-align: center; position: relative; }
         .profile-header .student-id-badge { background: var(--secondary-color); color: var(--primary-color); padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; display: inline-block; margin-top: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
@@ -121,15 +127,30 @@
         .profile-card h4 { color: var(--primary-color); border-bottom: 2px solid var(--secondary-color); padding-bottom: 10px; margin-bottom: 15px; font-size: 1.2rem; }
         .profile-info-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #ddd; padding: 8px 0; }
         .profile-info-row:last-child { border-bottom: none; }
-        .btn-download-pdf { background: #d32f2f; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s; margin-top: 10px; }
-        .btn-download-pdf:hover { background: #b71c1c; }
-        #pdf-content { display: none; width: 700px; padding: 30px; background: #fff; font-family: 'SolaimanLipi', sans-serif; color: #000; }
-        .pdf-header { text-align: center; border-bottom: 3px solid var(--primary-color); padding-bottom: 20px; margin-bottom: 20px; }
-        .pdf-header img { height: 60px; margin-bottom: 10px; }
-        .pdf-header h1 { color: var(--primary-color); margin: 5px 0; font-size: 28px; }
-        .pdf-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .pdf-table th, .pdf-table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        .pdf-table th { background-color: #f2f2f2; width: 40%; font-weight: bold; }
+        .btn-download-pdf { background: #2e7d32; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s; margin-top: 10px; }
+        .btn-download-pdf:hover { background: #1b5e20; }
+        .btn-logout { background: #d32f2f; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s; margin-top: 10px; margin-left: 10px; }
+        .btn-logout:hover { background: #b71c1c; }
+        
+        /* PDF Fix: Display None সরিয়ে Position দিয়ে লুকানো হয়েছে যাতে হোয়াইট পেজ না আসে */
+        #pdf-content { 
+            position: fixed; 
+            left: -10000px;
+            top: 0;
+            width: 700px; 
+            padding: 40px; 
+            background: #fff; 
+            font-family: 'SolaimanLipi', sans-serif; 
+            color: #000;
+            z-index: -1; 
+        }
+        .pdf-header { text-align: center; border-bottom: 3px solid var(--primary-color); padding-bottom: 20px; margin-bottom: 30px; }
+        .pdf-header img { height: 70px; margin-bottom: 10px; }
+        .pdf-header h1 { color: var(--primary-color); margin: 5px 0; font-size: 28px; font-weight: bold; }
+        .pdf-header p { font-size: 14px; color: #333; }
+        .pdf-table { width: 100%; border-collapse: collapse; margin-top: 20px; border: 1px solid #000; }
+        .pdf-table th, .pdf-table td { border: 1px solid #000; padding: 12px; text-align: left; font-size: 16px; }
+        .pdf-table th { background-color: #f2f2f2; width: 35%; font-weight: bold; color: var(--primary-color); }
         @keyframes slideDown { from {transform: translateY(-50px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
         @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
         .admission-section { padding: 60px 0; background: #eef2f5; display: none; }
@@ -339,7 +360,7 @@
         </div>
     </section>
 
-    <!-- Student Profile Page -->
+    <!-- Student Profile Page (Updated) -->
     <section id="student-profile-page" class="special-page-content">
         <div class="container">
             <h2 class="section-title">স্টুডেন্ট ড্যাশবোর্ড</h2>
@@ -352,25 +373,31 @@
                 <div class="profile-body">
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
                         <div class="profile-card">
-                            <h4><i class="fas fa-user"></i> ব্যক্তিগত তথ্য</h4>
-                            <div class="profile-info-row"><strong>অভিভাবক:</strong> <span id="fullPGuardian">---</span></div>
-                            <div class="profile-info-row"><strong>মোবাইল:</strong> <span id="fullPMobile">---</span></div>
+                            <h4><i class="fas fa-user-graduate"></i> শিক্ষার্থীর তথ্য</h4>
+                            <div class="profile-info-row"><strong>ফোন নাম্বার:</strong> <span id="fullPMobile">---</span></div>
+                            <div class="profile-info-row"><strong>ইমেইল:</strong> <span id="fullPEmail">---</span></div>
                             <div class="profile-info-row"><strong>শ্রেণী:</strong> <span id="fullPClass">---</span></div>
                             <div class="profile-info-row"><strong>রোল:</strong> <span id="fullPRoll">---</span></div>
                             <div class="profile-info-row"><strong>ঠিকানা:</strong> <span id="fullPAddress">---</span></div>
                         </div>
                         <div class="profile-card">
-                            <h4><i class="fas fa-graduation-cap"></i> কোর্স ও পেমেন্ট</h4>
-                            <div class="profile-info-row"><strong>কোর্স:</strong> <span id="fullPCourse">---</span></div>
-                            <div class="profile-info-row"><strong>কোর্স ফি:</strong> <span id="fullPFee">---</span></div>
+                            <h4><i class="fas fa-users"></i> অভিভাবকের তথ্য</h4>
+                            <div class="profile-info-row"><strong>অভিভাবকের নাম:</strong> <span id="fullPGuardian">---</span></div>
+                            <div class="profile-info-row"><strong>অভিভাবকের ফোন:</strong> <span id="fullPGuardianMobile">---</span></div>
+                        </div>
+                        <div class="profile-card full-width">
+                            <h4><i class="fas fa-book-reader"></i> ভর্তিকৃত কোর্স তথ্য</h4>
+                            <div class="profile-info-row"><strong>কোর্সের নাম:</strong> <span id="fullPCourse">---</span></div>
+                            <div class="profile-info-row"><strong>কোর্স প্রাইস:</strong> <span id="fullPFee">---</span></div>
                             <div class="profile-info-row"><strong>পেমেন্ট মেথড:</strong> <span id="fullPMethod">---</span></div>
                             <div class="profile-info-row"><strong>TrxID:</strong> <span id="fullPTrx">---</span></div>
-                            <div class="profile-info-row"><strong>স্ট্যাটাস:</strong> <span id="fullProfileStatus" style="color: green; font-weight: bold;">---</span></div>
+                            <div class="profile-info-row"><strong>ভর্তির স্ট্যাটাস:</strong> <span id="fullProfileStatus" style="font-weight: bold; background: #e0f2f1; padding: 2px 8px; border-radius: 4px; color: green;">---</span></div>
                         </div>
                     </div>
                     <div style="text-align: center; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
-                        <h3 style="color: var(--primary-color); margin-bottom: 10px;">ভর্তির রসিদ ডাউনলোড করুন</h3>
-                        <button onclick="downloadPDF()" class="btn-download-pdf"><i class="fas fa-file-pdf"></i> PDF ডাউনলোড করুন</button>
+                        <h3 style="color: var(--primary-color); margin-bottom: 15px;">অন্যান্য অপশন</h3>
+                        <button onclick="downloadPDF()" class="btn-download-pdf"><i class="fas fa-file-pdf"></i> তথ্য ডাউনলোড করুন (PDF)</button>
+                        <button onclick="logoutUser()" class="btn-logout"><i class="fas fa-sign-out-alt"></i> লগ আউট</button>
                     </div>
                 </div>
             </div>
@@ -401,6 +428,42 @@
                     <input type="password" id="loginPassword" placeholder="পাসওয়ার্ড" required>
                     <button type="submit" id="loginSubmitBtn">লগইন</button>
                 </form>
+                <div class="forgot-password-link">
+                    <a href="#" onclick="openForgotPasswordModal()">পাসওয়ার্ড ভুলে গেছেন?</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal (নতুন করে যুক্ত করা হলো) -->
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header"><h2>পাসওয়ার্ড পুনরুদ্ধার</h2><span class="close" onclick="closeForgotPasswordModal()">&times;</span></div>
+            <div class="modal-body">
+                <!-- Step 1: Input Email -->
+                <div id="fp-step-email">
+                    <p style="margin-bottom: 15px;">আপনার ইমেইল দিন। আমরা একটি ওটিপি (OTP) পাঠাব।</p>
+                    <div class="login-form-wrapper">
+                        <input type="email" id="fpEmail" placeholder="আপনার ইমেইল এড্রেস" required>
+                        <button type="button" onclick="sendOTP()">ওটিপি (OTP) পাঠান</button>
+                    </div>
+                </div>
+                <!-- Step 2: Input OTP -->
+                <div id="fp-step-otp" style="display: none;">
+                    <p style="margin-bottom: 15px; color: green;">ইমেইলে ওটিপি পাঠানো হয়েছে। চেক করুন।</p>
+                    <div class="login-form-wrapper">
+                        <input type="text" id="fpOTP" placeholder="৬ ডিজিটের ওটিপি দিন" required>
+                        <button type="button" onclick="verifyOTP()">যাচাই করুন</button>
+                    </div>
+                </div>
+                <!-- Step 3: New Password -->
+                <div id="fp-step-newpass" style="display: none;">
+                    <p style="margin-bottom: 15px;">আপনার নতুন পাসওয়ার্ড সেট করুন।</p>
+                    <div class="login-form-wrapper">
+                        <input type="password" id="fpNewPass" placeholder="নতুন পাসওয়ার্ড" required>
+                        <button type="button" onclick="resetPassword()">পাসওয়ার্ড রিসেট করুন</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -514,22 +577,24 @@
             <h1>গ্রোথ কোচিং সেন্টার</h1>
             <p>কাশিডাঙ্গা বাজার, বিরল, দিনাজপুর | মোবাইল: ০১৭৩৭৮৩৭০৮০</p>
         </div>
-        <h2 style="text-align: center; text-decoration: underline; margin-bottom: 20px;">ভর্তির রসিদ</h2>
+        <h2 style="text-align: center; text-decoration: underline; margin-bottom: 20px;">ভর্তির তথ্য ও রসিদ</h2>
         <table class="pdf-table">
             <tr><th>স্টুডেন্ট আইডি</th><td id="pdfStudentId">---</td></tr>
             <tr><th>শিক্ষার্থীর নাম</th><td id="pdfName">---</td></tr>
+            <tr><th>মোবাইল নাম্বার</th><td id="pdfMobile">---</td></tr>
+            <tr><th>ইমেইল আইডি</th><td id="pdfEmail">---</td></tr>
             <tr><th>অভিভাবকের নাম</th><td id="pdfGuardian">---</td></tr>
+            <tr><th>অভিভাবকের মোবাইল</th><td id="pdfGuardianMobile">---</td></tr>
             <tr><th>শ্রেণী</th><td id="pdfClass">---</td></tr>
-            <tr><th>রোল</th><td id="pdfRoll">---</td></tr>
-            <tr><th>মোবাইল</th><td id="pdfMobile">---</td></tr>
+            <tr><th>রোল নং</th><td id="pdfRoll">---</td></tr>
             <tr><th>ঠিকানা</th><td id="pdfAddress">---</td></tr>
             <tr><th>ভর্তিকৃত কোর্স</th><td id="pdfCourse">---</td></tr>
             <tr><th>কোর্স ফি</th><td id="pdfFee">---</td></tr>
             <tr><th>পেমেন্ট মেথড</th><td id="pdfMethod">---</td></tr>
             <tr><th>TrxID (যদি থাকে)</th><td id="pdfTrx">---</td></tr>
-            <tr><th>ভর্তির তারিখ</th><td id="pdfDate">---</td></tr>
+            <tr><th>ভর্তির স্ট্যাটাস</th><td id="pdfStatus">---</td></tr>
         </table>
-        <div style="margin-top: 50px; display: flex; justify-content: space-between;">
+        <div style="margin-top: 60px; display: flex; justify-content: space-between;">
             <div style="text-align: center;"><p>___________________</p><p>শিক্ষার্থীর স্বাক্ষর</p></div>
             <div style="text-align: center;"><p>___________________</p><p>কর্তৃপক্ষের স্বাক্ষর</p></div>
         </div>
@@ -629,15 +694,55 @@
         function closeLoginModal() { document.getElementById('loginModal').style.display = "none"; }
         function closeSuccessModalAndGoHome() { document.getElementById('successModal').style.display = "none"; showLandingPage(); }
         function enrollFromModal() { closeModal(); showAdmissionForm(currentSelectedCourseId); }
-        window.onclick = function(event) { const courseModal = document.getElementById('courseModal'); const loginModal = document.getElementById('loginModal'); const successModal = document.getElementById('successModal'); if (event.target == courseModal) courseModal.style.display = "none"; if (event.target == loginModal) loginModal.style.display = "none"; if (event.target == successModal) successModal.style.display = "none"; }
-        function downloadPDF() { const element = document.getElementById('pdf-content'); const opt = { margin: 0.5, filename: 'Admission_Receipt_GrowthCoaching.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }; element.style.display = 'block'; html2pdf().set(opt).from(element).save().then(() => { element.style.display = 'none'; }); }
+        
+        // Forgot Password Modal Functions
+        function openForgotPasswordModal() {
+            closeLoginModal();
+            document.getElementById('forgotPasswordModal').style.display = "block";
+            // Reset to step 1
+            document.getElementById('fp-step-email').style.display = 'block';
+            document.getElementById('fp-step-otp').style.display = 'none';
+            document.getElementById('fp-step-newpass').style.display = 'none';
+            document.getElementById('fpEmail').value = "";
+            document.getElementById('fpOTP').value = "";
+            document.getElementById('fpNewPass').value = "";
+        }
+        function closeForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').style.display = "none";
+        }
+
+        window.onclick = function(event) { 
+            const courseModal = document.getElementById('courseModal'); 
+            const loginModal = document.getElementById('loginModal'); 
+            const successModal = document.getElementById('successModal'); 
+            const forgotModal = document.getElementById('forgotPasswordModal');
+            if (event.target == courseModal) courseModal.style.display = "none"; 
+            if (event.target == loginModal) loginModal.style.display = "none"; 
+            if (event.target == successModal) successModal.style.display = "none"; 
+            if (event.target == forgotModal) forgotModal.style.display = "none"; 
+        }
+        
+        // PDF Download Fix: এখন আর ডিসপ্লে নান নয়, তাই ব্ল্যাঙ্ক পেজ আসবে না
+        function downloadPDF() { 
+            const element = document.getElementById('pdf-content'); 
+            // PDF অপশন কনফিগারেশন
+            const opt = { 
+                margin: 0.5, 
+                filename: 'Admission_Profile_GrowthCoaching.pdf', 
+                image: { type: 'jpeg', quality: 0.98 }, 
+                html2canvas: { scale: 2, useCORS: true }, 
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } 
+            }; 
+            // যেহেতু এখন পজিশন দিয়ে লুকানো আছে, ডিসপ্লে ব্লকের দরকার নেই, সরাসরি কল দিলেই হবে
+            html2pdf().set(opt).from(element).save();
+        }
     </script>
 
     <!-- Firebase -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, doc, setDoc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, query, where, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDTpAqEbM81jj5q7Lp9tupXS2Jnsq3B_Ng",
@@ -682,7 +787,7 @@
 
                     // Populate Select
                     const option = document.createElement('option');
-                    option.value = data.title; // Saving Title as value for compatibility
+                    option.value = data.title; 
                     option.setAttribute('data-price', data.price);
                     option.innerText = data.title;
                     select.appendChild(option);
@@ -717,31 +822,47 @@
         };
 
         function populateStudentData(data) {
-            document.getElementById('pdfStudentId').innerText = data.studentId;
-            document.getElementById('pdfName').innerText = data.studentName;
-            document.getElementById('pdfGuardian').innerText = data.guardianName;
-            document.getElementById('pdfClass').innerText = data.class;
-            document.getElementById('pdfRoll').innerText = data.roll;
-            document.getElementById('pdfMobile').innerText = data.studentMobile;
-            document.getElementById('pdfAddress').innerText = data.address;
-            document.getElementById('pdfCourse').innerText = data.courseName;
-            document.getElementById('pdfFee').innerText = data.courseFee + ' টাকা';
+            // PDF Data mapping
+            document.getElementById('pdfStudentId').innerText = data.studentId || 'N/A';
+            document.getElementById('pdfName').innerText = data.studentName || 'N/A';
+            document.getElementById('pdfMobile').innerText = data.studentMobile || 'N/A';
+            document.getElementById('pdfEmail').innerText = data.email || 'N/A';
+            document.getElementById('pdfGuardian').innerText = data.guardianName || 'N/A';
+            document.getElementById('pdfGuardianMobile').innerText = data.guardianMobile || 'N/A';
+            document.getElementById('pdfClass').innerText = data.class || 'N/A';
+            document.getElementById('pdfRoll').innerText = data.roll || 'N/A';
+            document.getElementById('pdfAddress').innerText = data.address || 'N/A';
+            document.getElementById('pdfCourse').innerText = data.courseName || 'N/A';
+            document.getElementById('pdfFee').innerText = (data.courseFee || '0') + ' টাকা';
             document.getElementById('pdfMethod').innerText = data.paymentMethod === 'online' ? 'Online' : 'Cash';
             document.getElementById('pdfTrx').innerText = data.trxId || 'N/A';
-            document.getElementById('pdfDate').innerText = new Date(data.admittedAt).toLocaleDateString();
+            document.getElementById('pdfStatus').innerText = data.status || 'Pending';
 
-            document.getElementById('fullProfileName').innerText = data.studentName;
-            document.getElementById('fullProfileId').innerText = "ID: " + data.studentId;
-            document.getElementById('fullPGuardian').innerText = data.guardianName;
-            document.getElementById('fullPMobile').innerText = data.studentMobile;
-            document.getElementById('fullPClass').innerText = data.class;
-            document.getElementById('fullPRoll').innerText = data.roll;
-            document.getElementById('fullPAddress').innerText = data.address;
-            document.getElementById('fullPCourse').innerText = data.courseName;
-            document.getElementById('fullPFee').innerText = data.courseFee + ' টাকা';
+            // Profile Page Data Mapping
+            document.getElementById('fullProfileName').innerText = data.studentName || 'N/A';
+            document.getElementById('fullProfileId').innerText = "ID: " + (data.studentId || 'N/A');
+            document.getElementById('fullPMobile').innerText = data.studentMobile || 'N/A';
+            document.getElementById('fullPEmail').innerText = data.email || 'N/A';
+            document.getElementById('fullPClass').innerText = data.class || 'N/A';
+            document.getElementById('fullPRoll').innerText = data.roll || 'N/A';
+            document.getElementById('fullPAddress').innerText = data.address || 'N/A';
+            document.getElementById('fullPGuardian').innerText = data.guardianName || 'N/A';
+            document.getElementById('fullPGuardianMobile').innerText = data.guardianMobile || 'N/A';
+            document.getElementById('fullPCourse').innerText = data.courseName || 'N/A';
+            document.getElementById('fullPFee').innerText = (data.courseFee || '0') + ' টাকা';
             document.getElementById('fullPMethod').innerText = data.paymentMethod === 'online' ? 'অনলাইন' : 'সরাসরি অফিস';
             document.getElementById('fullPTrx').innerText = data.trxId || 'N/A';
             document.getElementById('fullProfileStatus').innerText = data.status || 'Pending';
+
+            // Status Color Code
+            const statusElem = document.getElementById('fullProfileStatus');
+            if(data.status === 'Approved') {
+                statusElem.style.color = 'green';
+                statusElem.style.background = '#e8f5e9';
+            } else {
+                statusElem.style.color = '#f57f17';
+                statusElem.style.background = '#fff8e1';
+            }
         }
 
         const admissionForm = document.getElementById('onlineAdmissionForm');
@@ -759,7 +880,12 @@
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, studentData.email, studentData.password);
                 const user = userCredential.user;
+                
+                // পাসওয়ার্ড ব্যাকআপ রাখা (রিসেট লজিকের জন্য)
+                const plainPassword = studentData.password;
                 delete studentData.password;
+                studentData.password = plainPassword; 
+
                 studentData.uid = user.uid;
                 studentData.studentId = generateStudentId();
                 studentData.admittedAt = new Date().toISOString();
@@ -768,6 +894,7 @@
                 await setDoc(doc(db, "students", user.uid), studentData);
 
                 try {
+                    // এখানে আগের (File 1) এর সার্ভিস আইডি ব্যবহার করা হচ্ছে
                     const emailParams = {
                         to_email: studentData.email,
                         to_name: studentData.studentName,
@@ -809,8 +936,21 @@
             loginBtn.disabled = true;
 
             try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
+                let user;
+                try {
+                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                    user = userCredential.user;
+                } catch (authError) {
+                    // যদি অথেন্টিকেশন ফেইল করে, তাহলে ফায়ারবেস ডাটাবেসের পাসওয়ার্ড ফিল্ড চেক করবে (রিসেট লজিকের জন্য)
+                    const q = query(collection(db, "students"), where("email", "==", email), where("password", "==", password));
+                    const querySnapshot = await getDocs(q);
+                    if (!querySnapshot.empty) {
+                         user = { uid: querySnapshot.docs[0].id };
+                    } else {
+                        throw authError;
+                    }
+                }
+
                 const docRef = doc(db, "students", user.uid);
                 const docSnap = await getDoc(docRef);
 
@@ -829,8 +969,107 @@
                 loginBtn.disabled = false;
             }
         });
+
+        // OTP & Password Reset Logic
+        let generatedOTP = null;
+        let resetEmail = null;
+        let resetUserDocId = null;
+        let resetUserName = null;
+
+        window.sendOTP = async () => {
+            const email = document.getElementById('fpEmail').value;
+            if(!email) { alert("দয়া করে ইমেইল দিন"); return; }
+            
+            // Check if email exists in Database
+            const q = query(collection(db, "students"), where("email", "==", email));
+            const querySnapshot = await getDocs(q);
+            
+            if (querySnapshot.empty) {
+                alert("এই ইমেইল দিয়ে কোনো স্টুডেন্ট পাওয়া যায়নি।");
+                return;
+            }
+
+            resetUserDocId = querySnapshot.docs[0].id;
+            resetUserName = querySnapshot.docs[0].data().studentName;
+            resetEmail = email;
+
+            // Generate 6 digit OTP
+            generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+
+            // Send via EmailJS using NEW credentials specifically
+            const params = {
+                to_name: resetUserName,
+                to_email: email,
+                otp_code: generatedOTP
+            };
+
+            const btn = document.querySelector('#fp-step-email button');
+            btn.innerText = "পাঠানো হচ্ছে...";
+            btn.disabled = true;
+
+            // এখানে নতুন পাবলিক কি আলাদাভাবে পাস করা হচ্ছে
+            emailjs.send("service_op85iaf", "template_om7hmab", params, "-N2LOZiKHf29pdyeX")
+            .then(function(response) {
+                document.getElementById('fp-step-email').style.display = 'none';
+                document.getElementById('fp-step-otp').style.display = 'block';
+                btn.innerText = "ওটিপি (OTP) পাঠান";
+                btn.disabled = false;
+            }, function(error) {
+                alert("ইমেইল পাঠাতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+                console.log("FAILED...", error);
+                btn.innerText = "ওটিপি (OTP) পাঠান";
+                btn.disabled = false;
+            });
+        };
+
+        window.verifyOTP = () => {
+            const inputOTP = document.getElementById('fpOTP').value;
+            if(inputOTP === generatedOTP) {
+                document.getElementById('fp-step-otp').style.display = 'none';
+                document.getElementById('fp-step-newpass').style.display = 'block';
+            } else {
+                alert("ভুল ওটিপি! আবার চেষ্টা করুন।");
+            }
+        };
+
+        window.resetPassword = async () => {
+            const newPass = document.getElementById('fpNewPass').value;
+            if(newPass.length < 6) { alert("পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।"); return; }
+            
+            const btn = document.querySelector('#fp-step-newpass button');
+            btn.innerText = "পরিবর্তন করা হচ্ছে...";
+            btn.disabled = true;
+
+            try {
+                // Update password in Firestore
+                const userRef = doc(db, "students", resetUserDocId);
+                await updateDoc(userRef, {
+                    password: newPass
+                });
+                
+                alert("পাসওয়ার্ড সফলভাবে পরিবর্তন করা হয়েছে! এখন লগইন করুন।");
+                closeForgotPasswordModal();
+                openLoginModal();
+            } catch (error) {
+                console.error(error);
+                alert("পাসওয়ার্ড পরিবর্তন করতে সমস্যা হয়েছে।");
+            } finally {
+                btn.innerText = "পাসওয়ার্ড রিসেট করুন";
+                btn.disabled = false;
+            }
+        };
+
+        // Logout Function
+        window.logoutUser = () => {
+            signOut(auth).then(() => {
+                alert("সফলভাবে লগ আউট হয়েছে।");
+                showLandingPage();
+            }).catch((error) => {
+                console.error("Logout error", error);
+            });
+        };
         
-        window.openCourseDetails = openCourseDetails; // Export to window
+        window.openCourseDetails = openCourseDetails;
     </script>
 </body>
 </html>
