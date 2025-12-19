@@ -6,8 +6,8 @@
     <title>গ্রোথ কোচিং সেন্টার | SSC 2026 স্পেশাল প্রস্তুতি</title>
     <!-- ফন্ট আইকন -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- PDF জেনারেশন লাইব্রেরি -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Image জেনারেশন লাইব্রেরি -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     
     <!-- EmailJS লাইব্রেরি -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -127,12 +127,12 @@
         .profile-card h4 { color: var(--primary-color); border-bottom: 2px solid var(--secondary-color); padding-bottom: 10px; margin-bottom: 15px; font-size: 1.2rem; }
         .profile-info-row { display: flex; justify-content: space-between; border-bottom: 1px dashed #ddd; padding: 8px 0; }
         .profile-info-row:last-child { border-bottom: none; }
-        .btn-download-pdf { background: #2e7d32; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s; margin-top: 10px; }
-        .btn-download-pdf:hover { background: #1b5e20; }
+        .btn-download-image { background: #2e7d32; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s; margin-top: 10px; }
+        .btn-download-image:hover { background: #1b5e20; }
         .btn-logout { background: #d32f2f; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s; margin-top: 10px; margin-left: 10px; }
         .btn-logout:hover { background: #b71c1c; }
         
-        /* PDF Fix: Display None সরিয়ে Position দিয়ে লুকানো হয়েছে যাতে হোয়াইট পেজ না আসে */
+        /* Image Fix: Display None সরিয়ে Position দিয়ে লুকানো হয়েছে যাতে হোয়াইট পেজ না আসে */
         #pdf-content { 
             position: fixed; 
             left: -10000px;
@@ -396,7 +396,7 @@
                     </div>
                     <div style="text-align: center; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
                         <h3 style="color: var(--primary-color); margin-bottom: 15px;">অন্যান্য অপশন</h3>
-                        <button onclick="downloadPDF()" class="btn-download-pdf"><i class="fas fa-file-pdf"></i> তথ্য ডাউনলোড করুন (PDF)</button>
+                        <button onclick="downloadImage()" class="btn-download-image"><i class="fas fa-file-image"></i> তথ্য ডাউনলোড করুন (Image)</button>
                         <button onclick="logoutUser()" class="btn-logout"><i class="fas fa-sign-out-alt"></i> লগ আউট</button>
                     </div>
                 </div>
@@ -562,8 +562,8 @@
                     <strong>আপনার স্টুডেন্ট আইডি:</strong>
                     <h1 id="successStudentId" style="color: var(--secondary-color); margin: 5px 0;">---</h1>
                 </div>
-                <button onclick="downloadPDF()" class="btn-download-pdf" style="width: 100%; justify-content: center; margin-bottom: 10px;">
-                    <i class="fas fa-file-pdf"></i> ভর্তি ফরম ডাউনলোড করুন
+                <button onclick="downloadImage()" class="btn-download-image" style="width: 100%; justify-content: center; margin-bottom: 10px;">
+                    <i class="fas fa-file-image"></i> ভর্তি ফরম ডাউনলোড করুন
                 </button>
                 <button onclick="closeSuccessModalAndGoHome()" class="btn-nav" style="width: 100%; border: 1px solid #ddd; color: #333 !important;">হোম পেজে যান</button>
             </div>
@@ -606,7 +606,7 @@
             <div class="footer-container">
                 <div class="footer-col">
                     <div class="logo" style="margin-bottom: 20px;">
-                        <a href="#" class="logo-link"><h1 style="color: var(--secondary-color);">গ্রোথ <span>কোচিং</span></h1></a>
+                        <a href="#" class="logo-link"><h1 style="color: var(--secondary-color);">গ্রোথ <span>কোচিং সেন্টার</span></h1></a>
                     </div>
                     <p>আমরা শিক্ষার্থীদের মেধার সঠিক বিকাশে বিশ্বাসী। অভিজ্ঞ শিক্ষক মণ্ডলী এবং আধুনিক পাঠদান পদ্ধতির সমন্বয়ে আমরা নিশ্চিত করি সর্বোচ্চ ফলাফল।</p>
                     <div class="social-icons">
@@ -722,19 +722,15 @@
             if (event.target == forgotModal) forgotModal.style.display = "none"; 
         }
         
-        // PDF Download Fix: এখন আর ডিসপ্লে নান নয়, তাই ব্ল্যাঙ্ক পেজ আসবে না
-        function downloadPDF() { 
+        // Image Download Fix: এখন আর ডিসপ্লে নান নয়, তাই ব্ল্যাঙ্ক পেজ আসবে না
+        function downloadImage() { 
             const element = document.getElementById('pdf-content'); 
-            // PDF অপশন কনফিগারেশন
-            const opt = { 
-                margin: 0.5, 
-                filename: 'Admission_Profile_GrowthCoaching.pdf', 
-                image: { type: 'jpeg', quality: 0.98 }, 
-                html2canvas: { scale: 2, useCORS: true }, 
-                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } 
-            }; 
-            // যেহেতু এখন পজিশন দিয়ে লুকানো আছে, ডিসপ্লে ব্লকের দরকার নেই, সরাসরি কল দিলেই হবে
-            html2pdf().set(opt).from(element).save();
+            html2canvas(element).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'Admission_Profile_GrowthCoaching.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
         }
     </script>
 
