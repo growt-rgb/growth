@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>গ্রোথ কোচিং সেন্টার | রেজাল্ট চেক</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=SolaimanLipi&display=swap');
+        :root { --primary-color: #242650; --secondary-color: #F8B62D; --text-color: #333; --white: #fff; --light-bg: #f4f6f9; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'SolaimanLipi', sans-serif; }
+        body { background: var(--light-bg); color: var(--text-color); padding: 50px 20px; text-align: center; }
+        .container { max-width: 800px; margin: 0 auto; background: var(--white); padding: 40px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        h1 { color: var(--primary-color); margin-bottom: 30px; font-size: 2rem; }
+        .search-form { display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; }
+        .search-form input { padding: 12px; width: 250px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; }
+        .search-form button { background: var(--primary-color); color: var(--white); padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .search-form button:hover { background: var(--secondary-color); color: var(--primary-color); }
+        #resultSection { display: none; }
+        .result-header { background: var(--primary-color); color: white; padding: 20px; border-radius: 10px; margin-bottom: 30px; text-align: center; }
+        .result-header img { height: 60px; margin-bottom: 10px; }
+        .result-header h2 { margin: 10px 0 5px; color: var(--secondary-color); }
+        .result-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .result-table th, .result-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        .result-table th { background: var(--primary-color); color: var(--white); }
+        .total { font-weight: bold; color: var(--secondary-color); }
+        .grade-display { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-top: 20px; text-align: center; }
+        .grade-box { display: inline-block; padding: 15px 30px; background: linear-gradient(45deg, #2ecc71, #27ae60); color: white; border-radius: 8px; font-size: 1.5rem; font-weight: bold; margin: 10px; }
+        .gpa-box { display: inline-block; padding: 10px 20px; background: #3498db; color: white; border-radius: 8px; font-size: 1.2rem; font-weight: bold; margin: 10px; }
+        .status-box { display: inline-block; padding: 10px 20px; background: #9b59b6; color: white; border-radius: 8px; font-weight: bold; margin: 10px; }
+        .comment-box { background: #f8f9fa; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: left; border-left: 4px solid var(--secondary-color); }
+        .comment-box h4 { color: var(--primary-color); margin-bottom: 10px; }
+        .grade-Aplus { background: linear-gradient(45deg, #27ae60, #2ecc71); }
+        .grade-A { background: linear-gradient(45deg, #2ecc71, #3498db); }
+        .grade-B { background: linear-gradient(45deg, #f39c12, #e67e22); }
+        .grade-C { background: linear-gradient(45deg, #e74c3c, #c0392b); }
+        .grade-D { background: linear-gradient(45deg, #9b59b6, #8e44ad); }
+        .grade-F { background: linear-gradient(45deg, #7f8c8d, #95a5a6); }
+        #noResult { color: red; font-size: 1.2rem; display: none; }
+        .subject-row td:nth-child(2) { font-weight: bold; color: var(--primary-color); }
+        .subject-row td:nth-child(3) { color: #e74c3c; font-weight: bold; }
+        .subject-grade { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 0.9rem; color: white; }
+        .grade-badge-Aplus { background: #2ecc71; }
+        .grade-badge-A { background: #3498db; }
+        .grade-badge-B { background: #f39c12; }
+        .grade-badge-C { background: #e74c3c; }
+        .grade-badge-D { background: #9b59b6; }
+        .grade-badge-F { background: #7f8c8d; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="result-header" id="resultHeader" style="display: none;">
+            <img src="https://i.postimg.cc/T3JzNMm3/20251212-135421.png" alt="Logo">
+            <h2>গ্রোথ কোচিং সেন্টার</h2>
+            <p>কাশিডাঙ্গা বাজার, বিরল, দিনাজপুর</p>
+        </div>
+        
+        <h1>আপনার রেজাল্ট চেক করুন</h1>
+        <form id="searchForm" class="search-form">
+            <input type="text" id="studentIdInput" placeholder="স্টুডেন্ট আইডি দিন (যেমন: GC25XXXX)" required>
+            <button type="submit">সার্চ করুন</button>
+        </form>
+        <div id="resultSection">
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                <h3 style="color: var(--primary-color); margin-bottom: 10px;" id="studentName"></h3>
+                <p>স্টুডেন্ট আইডি: <strong id="studentIdDisplay"></strong></p>
+                <p>শ্রেণী: <strong id="studentClass"></strong></p>
+                <p>কোর্স: <strong id="studentCourse"></strong></p>
+            </div>
+            <table class="result-table">
+                <thead>
+                    <tr>
+                        <th>সাবজেক্ট</th>
+                        <th>প্রাপ্ত মার্ক</th>
+                        <th>গ্রেড</th>
+                        <th>GPA</th>
+                    </tr>
+                </thead>
+                <tbody id="resultTableBody"></tbody>
+                <tfoot>
+                    <tr>
+                        <td><strong>মোট মার্ক</strong></td>
+                        <td class="total" id="totalMarks">0</td>
+                        <td class="total" id="averageGrade">-</td>
+                        <td class="total" id="averageGPA">-</td>
+                    </tr>
+                </tfoot>
+            </table>
+            <div class="grade-display">
+                <h3 style="color: var(--primary-color); margin-bottom: 15px;">ফাইনাল রেজাল্ট</h3>
+                <div class="grade-box" id="finalGrade">-</div>
+                <div class="gpa-box" id="finalGPA">-</div>
+                <div class="status-box" id="resultStatus">-</div>
+            </div>
+            <div class="comment-box" id="commentSection" style="display: none;">
+                <h4><i class="fas fa-comment"></i> মন্তব্য/ফিডব্যাক</h4>
+                <p id="resultComment">মন্তব্য লোড হচ্ছে...</p>
+            </div>
+        </div>
+        <p id="noResult">কোনো রেজাল্ট পাওয়া যায়নি বা আইডি ভুল।</p>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTpAqEbM81jj5q7Lp9tupXS2Jnsq3B_Ng",
+            authDomain: "growth-coaching-centre.firebaseapp.com",
+            projectId: "growth-coaching-centre",
+            storageBucket: "growth-coaching-centre.firebasestorage.app",
+            messagingSenderId: "493057354872",
+            appId: "1:493057354872:web:38523a06795f0f0200518d",
+            measurementId: "G-RT5X82FM5F"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // বাংলাদেশের গ্রেডিং সিস্টেম অনুযায়ী আপডেটেড ফাংশন
+        function calculateGrade(marks) {
+            if (marks >= 80) return { grade: "A+", status: "অত্যুত্তম", gpa: 5.00, class: "grade-Aplus" };
+            if (marks >= 70) return { grade: "A", status: "খুব ভালো", gpa: 4.00, class: "grade-A" };
+            if (marks >= 60) return { grade: "A-", status: "ভালো", gpa: 3.50, class: "grade-A" };
+            if (marks >= 50) return { grade: "B", status: "মোটামুটি", gpa: 3.00, class: "grade-B" };
+            if (marks >= 40) return { grade: "C", status: "পাশ", gpa: 2.00, class: "grade-C" };
+            if (marks >= 33) return { grade: "D", status: "পাশ", gpa: 1.00, class: "grade-D" };
+            return { grade: "F", status: "ফেল", gpa: 0.00, class: "grade-F" };
+        }
+
+        // সাবজেক্টের জন্য গ্রেড ক্যালকুলেশন
+        function getSubjectGrade(marks) {
+            if (marks >= 80) return { grade: "A+", gpa: 5.00, class: "grade-badge-Aplus" };
+            if (marks >= 70) return { grade: "A", gpa: 4.00, class: "grade-badge-A" };
+            if (marks >= 60) return { grade: "A-", gpa: 3.50, class: "grade-badge-A" };
+            if (marks >= 50) return { grade: "B", gpa: 3.00, class: "grade-badge-B" };
+            if (marks >= 40) return { grade: "C", gpa: 2.00, class: "grade-badge-C" };
+            if (marks >= 33) return { grade: "D", gpa: 1.00, class: "grade-badge-D" };
+            return { grade: "F", gpa: 0.00, class: "grade-badge-F" };
+        }
+
+        const searchForm = document.getElementById('searchForm');
+        searchForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const studentId = document.getElementById('studentIdInput').value.trim();
+            if (!studentId) return;
+
+            try {
+                const q = query(collection(db, "students"), where("studentId", "==", studentId));
+                const querySnapshot = await getDocs(q);
+                if (querySnapshot.empty) {
+                    document.getElementById('resultSection').style.display = 'none';
+                    document.getElementById('resultHeader').style.display = 'none';
+                    document.getElementById('noResult').style.display = 'block';
+                    return;
+                }
+
+                const student = querySnapshot.docs[0].data();
+                document.getElementById('studentName').innerText = student.studentName;
+                document.getElementById('studentIdDisplay').innerText = student.studentId;
+                document.getElementById('studentClass').innerText = student.class || 'N/A';
+                document.getElementById('studentCourse').innerText = student.courseName || 'N/A';
+
+                const results = student.results || {};
+                const subjectList = student.subjectList || ['বাংলা', 'ইংরেজি', 'গণিত', 'বিজ্ঞান', 'সামাজিক বিজ্ঞান', 'ধর্ম'];
+
+                const tableBody = document.getElementById('resultTableBody');
+                tableBody.innerHTML = '';
+                let total = 0;
+                let count = 0;
+                let totalGPA = 0;
+
+                if (subjectList.length > 0) {
+                    // ডাইনামিক সাবজেক্টের জন্য
+                    subjectList.forEach(subjectName => {
+                        const mark = results[subjectName] || 'N/A';
+                        let gradeInfo = { grade: 'N/A', gpa: 'N/A', class: '' };
+                        
+                        if (mark !== 'N/A' && !isNaN(parseInt(mark))) {
+                            gradeInfo = getSubjectGrade(parseInt(mark));
+                            total += parseInt(mark);
+                            totalGPA += gradeInfo.gpa;
+                            count++;
+                        }
+                        
+                        tableBody.innerHTML += `
+                            <tr class="subject-row">
+                                <td>${subjectName}</td>
+                                <td>${mark !== 'N/A' ? mark : 'N/A'}</td>
+                                <td><span class="subject-grade ${gradeInfo.class}">${gradeInfo.grade}</span></td>
+                                <td>${gradeInfo.gpa !== 'N/A' ? gradeInfo.gpa.toFixed(2) : 'N/A'}</td>
+                            </tr>
+                        `;
+                    });
+                }
+
+                const average = count > 0 ? Math.round(total / count) : 0;
+                const averageGPA = count > 0 ? (totalGPA / count).toFixed(2) : 0;
+                const finalGrade = calculateGrade(average);
+                
+                document.getElementById('totalMarks').innerText = total;
+                document.getElementById('averageGrade').innerText = average > 0 ? `${average}%` : '-';
+                document.getElementById('averageGPA').innerText = averageGPA > 0 ? averageGPA : '-';
+                
+                const finalGradeElem = document.getElementById('finalGrade');
+                finalGradeElem.innerText = finalGrade.grade;
+                finalGradeElem.className = `grade-box ${finalGrade.class}`;
+                
+                document.getElementById('finalGPA').innerText = `GPA: ${finalGrade.gpa.toFixed(2)}`;
+                document.getElementById('resultStatus').innerText = finalGrade.status;
+
+                // মন্তব্য দেখান
+                if (student.resultComment) {
+                    document.getElementById('resultComment').innerText = student.resultComment;
+                    document.getElementById('commentSection').style.display = 'block';
+                } else {
+                    document.getElementById('commentSection').style.display = 'none';
+                }
+
+                document.getElementById('resultSection').style.display = 'block';
+                document.getElementById('resultHeader').style.display = 'block';
+                document.getElementById('noResult').style.display = 'none';
+            } catch (error) {
+                console.error(error);
+                alert("ডাটা লোড করতে সমস্যা হয়েছে।");
+            }
+        });
+    </script>
+</body>
+</html>

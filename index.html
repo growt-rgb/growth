@@ -131,6 +131,9 @@
         .btn-download-image:hover { background: #1b5e20; }
         .btn-logout { background: #d32f2f; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s; margin-top: 10px; margin-left: 10px; }
         .btn-logout:hover { background: #b71c1c; }
+        /* নতুন: রেজাল্ট দেখুন বাটন */
+        .btn-view-result { background: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s; margin-top: 10px; margin-left: 10px; }
+        .btn-view-result:hover { background: #2980b9; }
         
         /* Image Fix: Display None সরিয়ে Position দিয়ে লুকানো হয়েছে যাতে হোয়াইট পেজ না আসে */
         #pdf-content { 
@@ -232,6 +235,7 @@
                     <li><a href="#" onclick="showMeritPage(); toggleMenu()">মেধা যাচাই</a></li>
                     <li><a href="#" onclick="showAdmissionInfoPage(); toggleMenu()">কোর্সসমূহ</a></li>
                     <li><a href="#" class="btn-nav" onclick="showContactPage(); toggleMenu()">যোগাযোগ</a></li>
+                    <li><a href="result.html" target="_blank"><i class="fas fa-chart-line"></i> রেজাল্ট দেখুন</a></li>
                     <li><a href="#" class="login-btn" onclick="openLoginModal(); toggleMenu()">স্টুডেন্ট লগইন</a></li>
                 </ul>
             </nav>
@@ -398,6 +402,8 @@
                         <h3 style="color: var(--primary-color); margin-bottom: 15px;">অন্যান্য অপশন</h3>
                         <button onclick="downloadImage()" class="btn-download-image"><i class="fas fa-file-image"></i> তথ্য ডাউনলোড করুন (Image)</button>
                         <button onclick="logoutUser()" class="btn-logout"><i class="fas fa-sign-out-alt"></i> লগ আউট</button>
+                        <!-- নতুন: রেজাল্ট দেখুন বাটন -->
+                        <button onclick="viewResults()" class="btn-view-result"><i class="fas fa-chart-line"></i> রেজাল্ট দেখুন</button>
                     </div>
                 </div>
             </div>
@@ -620,6 +626,7 @@
                     <ul class="footer-links">
                         <li><a href="#" onclick="showAdmissionInfoPage()"><i class="fas fa-chevron-right"></i> কোর্সসমূহ</a></li>
                         <li><a href="#" onclick="showAdmissionForm()"><i class="fas fa-chevron-right"></i> অনলাইন ভর্তি</a></li>
+                        <li><a href="result.html" target="_blank"><i class="fas fa-chevron-right"></i> রেজাল্ট দেখুন</a></li>
                         <li><a href="#" onclick="openLoginModal()"><i class="fas fa-chevron-right"></i> প্রোফাইল লগইন</a></li>
                     </ul>
                 </div>
@@ -694,6 +701,11 @@
         function closeLoginModal() { document.getElementById('loginModal').style.display = "none"; }
         function closeSuccessModalAndGoHome() { document.getElementById('successModal').style.display = "none"; showLandingPage(); }
         function enrollFromModal() { closeModal(); showAdmissionForm(currentSelectedCourseId); }
+        
+        // নতুন: রেজাল্ট দেখুন ফাংশন
+        function viewResults() {
+            window.open("result.html", "_blank");
+        }
         
         // Forgot Password Modal Functions
         function openForgotPasswordModal() {
